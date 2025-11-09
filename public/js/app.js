@@ -33,27 +33,27 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 console.log("LIVE wind data loaded successfully from API.");
 
-                // 6. Konfigurasi dan BUAT velocity layer
-                velocityLayer = L.velocityLayer({
-                    displayValues: true,
-                    displayOptions: {
-                        velocityType: 'Wind',
-                        position: 'bottomleft',
-                        emptyString: 'No wind data'
-                    },
-                    // ==========================================================
-                    // PERBAIKAN FINAL ADA DI SINI:
-                    // API mengembalikan {data}, BUKAN [{data}]
-                    // Jadi kita harus mempassing 'data' secara langsung
-                    // ==========================================================
-                    data: data,
-                    maxVelocity: 15 // Kecepatan angin maks untuk skala warna
-                });
+                // PERBAIKAN: Tambahkan pengecekan untuk memastikan data tidak null
+                if (data) {
+                    // 6. Konfigurasi dan BUAT velocity layer
+                    velocityLayer = L.velocityLayer({
+                        displayValues: true,
+                        displayOptions: {
+                            velocityType: 'Wind',
+                            position: 'bottomleft',
+                            emptyString: 'No wind data'
+                        },
+                        data: data,
+                        maxVelocity: 15 // Kecepatan angin maks untuk skala warna
+                    });
 
-                // Tampilkan layer angin secara default
-                velocityLayer.addTo(map);
-                console.log("Velocity layer added to map by default.");
-
+                    // Tampilkan layer angin secara default
+                    velocityLayer.addTo(map);
+                    console.log("Velocity layer added to map by default.");
+                } else {
+                    // Jika data null, jangan buat layer dan beri pesan error
+                    console.error("Wind data from API is null. The velocity layer cannot be created.");
+                }
             })
             .catch(error => console.error('Error loading wind map data from API:', error));
 
