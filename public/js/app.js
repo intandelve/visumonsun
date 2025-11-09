@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             position: 'bottomleft',
                             emptyString: 'No wind data'
                         },
-                        data: data,
+                        data: data[0],
                         maxVelocity: 15 // Kecepatan angin maks untuk skala warna
                     });
 
