@@ -8,6 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Leaflet (diperlukan untuk ikon) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
@@ -75,7 +79,7 @@
                     </form>
                 </div>
                 
-                <!-- Contact Info (BAGIAN YANG DIPERBAIKI) -->
+                <!-- Contact Info (Sudah diperbaiki) -->
                 <div class="space-y-6">
                     <div class="bg-white p-8 rounded-xl shadow-lg flex items-start space-x-4">
                         <!-- Icon -->
@@ -111,7 +115,16 @@
         © 2025 VisuMonsun ID. All data provided by Copernicus Climate Change Service.
     </footer>
     
+    <!-- Library Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Library Leaflet -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-velocity@1.1.0/dist/leaflet-velocity.min.js"></script>
+    
     <!-- JavaScript Kustom Anda -->
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>
