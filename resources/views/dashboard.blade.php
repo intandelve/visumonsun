@@ -80,6 +80,10 @@
                            <svg class="w-8 h-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h12A2.25 2.25 0 0 0 20.25 14.25V3m-16.5 0h16.5m-16.5 0H3.75m16.5 0h.008v.008H20.25V3M10.5 6h.008v.008H10.5V6m3.75 0h.008v.008H14.25V6m-3.75 3h.008v.008H10.5V9m3.75 0h.008v.008H14.25V9m-3.75 3h.008v.008H10.5v-3.001M15 6.75v3m0 3v3.001" /></svg>
                             <span class="mt-2 text-sm font-semibold">Pressure</span>
                         </button>
+                        <button id="btn-mslp" class="flex flex-col items-center p-3 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            <svg class="w-8 h-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h12A2.25 2.25 0 0 0 20.25 14.25V3m-16.5 0h16.5m-16.5 0H3.75m16.5 0h.008v.008H20.25V3M10.5 6h.008v.008H10.5V6m3.75 0h.008v.008H14.25V6m-3.75 3h.008v.008H10.5V9m3.75 0h.008v.008H14.25V9m-3.75 3h.008v.008H10.5v-3.001M15 6.75v3m0 3v3.001" /></svg>
+                            <span class="mt-2 text-sm font-semibold">MSLP</span>
+                        </button>
                     </div>
                 </div>
                 

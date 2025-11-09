@@ -6,19 +6,19 @@ use App\Models\WindMapData; // <-- PENTING
 
 class WindMapDataController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data angin 'current_wind' yang paling baru
-        $windData = WindMapData::where('data_type', 'current_wind')
-                            ->latest() // Ambil yang terbaru
+        $dataType = $request->query('type', 'current_wind');
+
+        $mapData = WindMapData::where('data_type', $dataType)
+                            ->latest()
                             ->first();
 
-        if ($windData) {
-            // 'json_data' akan otomatis jadi array/object berkat casting
-            // Kita kirim JSON-nya langsung
-            return response()->json($windData->json_data); 
+        if ($mapData) {
+            return response()->json($mapData->json_data);
         }
 
-        return response()->json(['error' => 'Data peta angin tidak ditemukan'], 404);
+        return response()->json(['error' => 'Data peta tidak ditemukan'], 404);
     }
+
 }
