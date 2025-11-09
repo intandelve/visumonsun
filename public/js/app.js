@@ -43,10 +43,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                     // ==========================================================
                     // PERBAIKAN FINAL ADA DI SINI:
-                    // API mengembalikan [ {data} ], plugin butuh {data}
-                    // Jadi kita ambil item pertama dari array: data[0]
+                    // API mengembalikan {data}, BUKAN [{data}]
+                    // Jadi kita harus mempassing 'data' secara langsung
                     // ==========================================================
-                    data: data[0], 
+                    data: data, 
                     maxVelocity: 15 // Kecepatan angin maks untuk skala warna
                 });
 
