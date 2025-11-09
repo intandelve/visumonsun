@@ -1,5 +1,5 @@
-// Menunggu hingga seluruh halaman HTML selesai dimuat
-document.addEventListener("DOMContentLoaded", function () {
+// Menunggu hingga seluruh halaman HTML dan skrip (seperti jQuery) selesai dimuat
+$(document).ready(function() {
 
     console.log("Website script loaded!");
 
@@ -16,10 +16,24 @@ document.addEventListener("DOMContentLoaded", function () {
             attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
+        // Ambil data angin dari API dan tambahkan layer animasi
+        // Pastikan URL API benar dan server menyajikan data.
         fetch('/api/wind-map-data') 
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                // Validasi data sederhana: pastikan data adalah array dan tidak kosong
+                if (!Array.isArray(data) || data.length === 0) {
+                    console.error("API response is not a valid array or is empty:", data);
+                    return; // Hentikan eksekusi jika data tidak valid
+                }
+
                 console.log("LIVE wind data loaded successfully from API.");
+
                 velocityLayer = L.velocityLayer({
                     displayValues: true,
                     displayOptions: {
@@ -27,13 +41,19 @@ document.addEventListener("DOMContentLoaded", function () {
                         position: 'bottomleft',
                         emptyString: 'No wind data'
                     },
-                    data: data[0], // Ambil item pertama dari array
+                    data: data[0], // Gunakan data pertama dalam array
                     maxVelocity: 15
                 });
-                velocityLayer.addTo(map);
-                console.log("Velocity layer added to map by default.");
+
+                // Pastikan layer ditambahkan ke peta
+                if (velocityLayer) {
+                    velocityLayer.addTo(map);
+                    console.log("Velocity layer successfully added to map.");
+                } else {
+                    console.error("Failed to create velocity layer.");
+                }
             })
-            .catch(error => console.error('Error loading wind map data from API:', error));
+            .catch(error => console.error('Error loading or processing wind map data from API:', error));
 
         // Fungsionalitas Tombol Layer
         const btnWind = document.getElementById('btn-wind');
