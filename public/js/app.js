@@ -1,13 +1,13 @@
-// Menunggu hingga seluruh halaman HTML dan skrip (seperti jQuery) selesai dimuat
-$(document).ready(function() {
+// Menunggu hingga seluruh halaman HTML selesai dimuat
+document.addEventListener("DOMContentLoaded", function () {
 
     console.log("Website script loaded!");
 
     // --- LOGIKA UNTUK HALAMAN DASHBOARD (/) ---
     const mapContainer = document.getElementById('map');
-    let velocityLayer;
-    let mslpLayer;
+    let velocityLayer; // Simpan layer di sini agar bisa diakses nanti
 
+    // 2. Periksa apakah kita ada di halaman dashboard
     if (mapContainer) {
         console.log("Map container found, initializing map...");
         const map = L.map('map').setView([-2.5489, 118.0149], 5);
@@ -16,48 +16,39 @@ $(document).ready(function() {
             attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        // Fetch wind data
-        fetch('/api/wind-map-data?type=current_wind')
+        fetch('/api/wind-map-data')
             .then(response => response.json())
             .then(data => {
-                if (Array.isArray(data) && data.length > 0) {
+                console.log("LIVE wind data loaded successfully from API.");
+                if (data && data.length > 0) {
                     velocityLayer = L.velocityLayer({
                         displayValues: true,
-                        displayOptions: { velocityType: 'Wind', position: 'bottomleft', emptyString: 'No wind data' },
-                        data: data[0],
+                        displayOptions: {
+                            velocityType: 'Wind',
+                            position: 'bottomleft',
+                            emptyString: 'No wind data'
+                        },
+                        data: data,
                         maxVelocity: 15
                     });
                     velocityLayer.addTo(map);
                 }
-            }).catch(error => console.error('Error loading wind data:', error));
+                console.log("Velocity layer added to map by default.");
+            })
+            .catch(error => console.error('Error loading wind map data from API:', error));
 
-        // Fetch MSLP data
-        fetch('/api/wind-map-data?type=mslp')
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.image_url) {
-                    const imageUrl = data.image_url;
-                    const imageBounds = [[-11, 95], [6, 141]]; // Sesuaikan dengan batas gambar MSLP
-                    mslpLayer = L.imageOverlay(imageUrl, imageBounds, { opacity: 0.7 });
-                }
-            }).catch(error => console.error('Error loading MSLP data:', error));
-
-        // Layer Toggling
+        // Fungsionalitas Tombol Layer
         const btnWind = document.getElementById('btn-wind');
-        const btnMslp = document.getElementById('btn-mslp');
-
-        if (btnWind && btnMslp) {
+        const btnRainfall = document.getElementById('btn-rainfall');
+        if (btnWind && btnRainfall) {
             btnWind.addEventListener('click', () => {
-                if (mslpLayer && map.hasLayer(mslpLayer)) map.removeLayer(mslpLayer);
                 if (velocityLayer && !map.hasLayer(velocityLayer)) map.addLayer(velocityLayer);
                 btnWind.classList.add('border-blue-500', 'bg-blue-50');
-                btnMslp.classList.remove('border-blue-500', 'bg-blue-50');
+                btnRainfall.classList.remove('border-blue-500', 'bg-blue-50');
             });
-
-            btnMslp.addEventListener('click', () => {
+            btnRainfall.addEventListener('click', () => {
                 if (velocityLayer && map.hasLayer(velocityLayer)) map.removeLayer(velocityLayer);
-                if (mslpLayer && !map.hasLayer(mslpLayer)) map.addLayer(mslpLayer);
-                btnMslp.classList.add('border-blue-500', 'bg-blue-50');
+                btnRainfall.classList.add('border-blue-500', 'bg-blue-50');
                 btnWind.classList.remove('border-blue-500', 'bg-blue-50');
             });
         }
