@@ -18,12 +18,15 @@ class WindMapDataSeeder extends Seeder
         if (File::exists($jsonPath)) {
 
             // Baca isi file sebagai string
-            $jsonData = File::get($jsonPath); 
+            $jsonString = File::get($jsonPath);
+            // DECODE string JSON menjadi array PHP
+            $jsonData = json_decode($jsonString, true);
 
             // Masukkan ke database
             DB::table('wind_map_data')->insert([
                 'data_type' => 'current_wind',
-                'json_data' => $jsonData, // Simpan seluruh JSON sebagai teks
+                // Pastikan data di-encode kembali ke JSON saat disimpan
+                'json_data' => json_encode($jsonData),
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
