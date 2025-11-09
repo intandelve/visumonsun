@@ -8,6 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Leaflet (diperlukan untuk ikon footer) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
@@ -39,44 +43,48 @@
 
     <!-- Main Content -->
     <main class="flex-grow p-4 lg:p-6 space-y-6">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            
             <!-- Page Title -->
             <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">About VisuMonsun ID</h1>
             
-            <!-- Our Mission Section -->
-            <div class="bg-white p-8 rounded-xl shadow-lg mb-6">
-                <h2 class="text-2xl font-bold mb-4">Our Mission</h2>
-                <p class="text-gray-700 leading-relaxed">
+            <!-- Our Mission -->
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold text-blue-600 mb-4">Our Mission</h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
                     VisuMonsun ID is a specialized web platform dedicated to the visualization and forecasting of wind and monsoon patterns in Indonesia. Our mission is to transform complex atmospheric data into clear, actionable insights for researchers, industry sectors (like agriculture, maritime, and renewable energy), and the public.
                 </p>
-                <p class="text-gray-700 leading-relaxed mt-4">
+                <p class="text-gray-600 leading-relaxed text-lg mt-4">
                     By providing detailed historical analysis and AI-driven forecasts, we aim to enhance preparedness and decision-making related to seasonal weather phenomena.
                 </p>
             </div>
-            
-            <!-- Data & Tech Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Data Source Card -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-4">Data Source: ERA5</h2>
-                    <p class="text-gray-700 leading-relaxed">
-                        Our platform is powered by **ERA5**, the fifth generation atmospheric reanalysis dataset from the <strong class="font-semibold">Copernicus Climate Change Service (C3S)</strong>.
-                    </p>
-                    <p class="text-gray-700 leading-relaxed mt-4">
-                        We use this high-resolution data to analyze decades of wind, rainfall, and pressure patterns.
+
+            <!-- Data Source & Technology -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <!-- Data Source -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Data Source: ERA5</h3>
+                    <p class="text-gray-600">
+                        Our platform is powered by **ERA5**, the fifth generation atmospheric reanalysis dataset from the Copernicus Climate Change Service (C3S). We use this high-resolution data to analyze decades of wind, rainfall, and pressure patterns.
                     </p>
                 </div>
-                <!-- Technology Card -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <h2 class="text-2xl font-bold mb-4">Technology</h2>
-                    <p class="text-gray-700 leading-relaxed">
-                        Our forecast models are built using **Python** with **LSTM (Deep Learning)** and **Prophet**.
-                    </p>
-                    <p class="text-gray-700 leading-relaxed mt-4">
-                        The web platform is driven by a **Laravel (PHP)** backend and a modern **JavaScript** (Leaflet.js, Chart.js) frontend.
+                <!-- Technology -->
+                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">Technology</h3>
+                    <p class="text-gray-600">
+                        Our forecast models are built using **Python** with **LSTM (Deep Learning)** and **Prophet**. The web platform is driven by a **Laravel (PHP)** backend and a modern **JavaScript** (Leaflet.js, Chart.js) frontend.
                     </p>
                 </div>
             </div>
+
+            <!-- Team (Placeholder) -->
+            <div>
+                <h2 class="text-2xl font-bold text-blue-600 mb-4">Our Team</h2>
+                <p class="text-gray-600 leading-relaxed text-lg">
+                    We are a dedicated team of meteorologists, data scientists, and software engineers passionate about making climate data accessible and understandable.
+                </p>
+            </div>
+
         </div>
     </main>
     
@@ -85,7 +93,16 @@
         © 2025 VisuMonsun ID. All data provided by Copernicus Climate Change Service.
     </footer>
     
+    <!-- Library Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Library Leaflet -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-velocity@1.1.0/dist/leaflet-velocity.min.js"></script>
+    
     <!-- JavaScript Kustom Anda -->
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>

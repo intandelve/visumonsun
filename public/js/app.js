@@ -10,91 +10,54 @@ document.addEventListener("DOMContentLoaded", function () {
     // 2. Periksa apakah kita ada di halaman dashboard
     if (mapContainer) {
         console.log("Map container found, initializing map...");
-
-        // 3. Inisialisasi Peta Leaflet
-        const map = L.map('map').setView([-2.5489, 118.0149], 5); // Koordinat Indonesia
-
-        // 4. Tambahkan 'Tile Layer' (background peta)
+        const map = L.map('map').setView([-2.5489, 118.0149], 5);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        // ==========================================================
-        // Ambil data angin dari API Laravel
-        // ==========================================================
         fetch('/api/wind-map-data') 
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 console.log("LIVE wind data loaded successfully from API.");
-
-                // PERBAIKAN: Tambahkan pengecekan untuk memastikan data tidak null
-                if (data) {
-                    // 6. Konfigurasi dan BUAT velocity layer
-                    velocityLayer = L.velocityLayer({
-                        displayValues: true,
-                        displayOptions: {
-                            velocityType: 'Wind',
-                            position: 'bottomleft',
-                            emptyString: 'No wind data'
-                        },
-                        data: data, 
-                        maxVelocity: 15 // Kecepatan angin maks untuk skala warna
-                    });
-
-                    // Tampilkan layer angin secara default
-                    velocityLayer.addTo(map);
-                    console.log("Velocity layer added to map by default.");
-                } else {
-                    // Jika data null, jangan buat layer dan beri pesan error
-                    console.error("Wind data from API is null. The velocity layer cannot be created.");
-                }
+                velocityLayer = L.velocityLayer({
+                    displayValues: true,
+                    displayOptions: {
+                        velocityType: 'Wind',
+                        position: 'bottomleft',
+                        emptyString: 'No wind data'
+                    },
+                    data: data[0], // Ambil item pertama dari array
+                    maxVelocity: 15
+                });
+                velocityLayer.addTo(map);
+                console.log("Velocity layer added to map by default.");
             })
             .catch(error => console.error('Error loading wind map data from API:', error));
 
-        // 7. Fungsionalitas untuk tombol layer
+        // Fungsionalitas Tombol Layer
         const btnWind = document.getElementById('btn-wind');
         const btnRainfall = document.getElementById('btn-rainfall');
-        // (Anda bisa tambahkan ID untuk tombol lain)
-
-        if (btnWind) {
+        if (btnWind && btnRainfall) {
             btnWind.addEventListener('click', () => {
-                if (velocityLayer && !map.hasLayer(velocityLayer)) {
-                    map.addLayer(velocityLayer);
-                }
-                // Atur style tombol
+                if (velocityLayer && !map.hasLayer(velocityLayer)) map.addLayer(velocityLayer);
                 btnWind.classList.add('border-blue-500', 'bg-blue-50');
                 btnRainfall.classList.remove('border-blue-500', 'bg-blue-50');
             });
-        }
-
-        if (btnRainfall) {
             btnRainfall.addEventListener('click', () => {
-                if (velocityLayer && map.hasLayer(velocityLayer)) {
-                    map.removeLayer(velocityLayer);
-                }
-                // Atur style tombol
+                if (velocityLayer && map.hasLayer(velocityLayer)) map.removeLayer(velocityLayer);
                 btnRainfall.classList.add('border-blue-500', 'bg-blue-50');
                 btnWind.classList.remove('border-blue-500', 'bg-blue-50');
             });
         }
 
-        // 8. Fungsionalitas untuk Time Slider
+        // Fungsionalitas Time Slider
         const timeSlider = document.getElementById('time-slider');
         const sliderLabel = document.getElementById('slider-label');
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
         if (timeSlider) {
             timeSlider.addEventListener('input', () => {
-                const monthName = months[timeSlider.value - 1];
-                sliderLabel.textContent = monthName;
-                console.log(`Time slider changed to: ${monthName}`);
-                // Di sini Anda akan mem-fetch data baru untuk bulan tersebut
+                sliderLabel.textContent = months[timeSlider.value - 1];
             });
         }
     }
@@ -102,52 +65,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- LOGIKA UNTUK HALAMAN DATA STATISTICS (/statistics) ---
 
-    // Opsi default untuk semua grafik agar rapi
     const chartOptions = {
         responsive: true,
         scales: { y: { beginAtZero: true } },
         plugins: { legend: { display: false } }
     };
-    
-    // Opsi untuk grafik perbandingan (dengan legenda)
     const comparisonChartOptions = {
         responsive: true,
         scales: { y: { beginAtZero: true } },
-        plugins: { legend: { display: true } } // Tampilkan legenda di sini
+        plugins: { legend: { display: true } }
     };
-
-
-    // 1. Cari elemen canvas utama
     const rainfallChartCanvas = document.getElementById('rainfallChart');
 
-    // 2. Periksa apakah elemen itu ada di halaman yang sedang dibuka
     if (rainfallChartCanvas) {
-
         console.log("Statistics charts initializing...");
 
-        // ==========================================================
         // GRAFIK #1: Average Rainfall (LIVE DARI API #1)
-        // ==========================================================
         fetch('/api/rainfall-stats')
             .then(response => response.json())
             .then(data => {
                 const labels = data.map(item => item.month_name);
                 const rainfallValues = data.map(item => item.rainfall_mm);
-
-                const rainfallData = {
-                    label: 'Average Rainfall (mm)',
-                    data: rainfallValues,
-                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                };
-
                 new Chart(rainfallChartCanvas, {
                     type: 'bar',
                     data: {
                         labels: labels,
-                        datasets: [rainfallData]
+                        datasets: [{
+                            label: 'Average Rainfall (mm)',
+                            data: rainfallValues,
+                            backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            borderRadius: 6,
+                        }]
                     },
                     options: chartOptions
                 });
@@ -155,20 +105,14 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error("Gagal mengambil data API Rainfall:", error));
 
-
-        // ==========================================================
         // GRAFIK #2: Wind Speed Trend (LIVE DARI API #2)
-        // ==========================================================
         const windChartCanvas = document.getElementById('windTrendChart');
         if (windChartCanvas) {
-            
             fetch('/api/wind-speed-stats')
                 .then(response => response.json())
                 .then(data => {
-
                     const labels = data.map(item => item.month_name);
                     const windValues = data.map(item => item.speed_ms);
-
                     new Chart(windChartCanvas, {
                         type: 'line',
                         data: {
@@ -185,32 +129,19 @@ document.addEventListener("DOMContentLoaded", function () {
                         options: chartOptions
                     });
                     console.log("Wind speed chart initialized with LIVE API data.");
-                
                 })
                 .catch(error => console.error("Gagal mengambil data API Wind Speed:", error));
         }
 
-        // ==========================================================
         // GRAFIK #3: Data Comparison (LIVE DARI API #3)
-        // ==========================================================
         const comparisonChartCanvas = document.getElementById('comparisonChart');
         if (comparisonChartCanvas) {
-            
             fetch('/api/comparison-data')
                 .then(response => response.json())
                 .then(data => {
-                    
-                    // Kita perlu memisahkan data 1998 dan 2023
                     const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    
-                    const data1998 = data
-                        .filter(item => item.year === 1998)
-                        .map(item => item.rainfall_mm);
-                        
-                    const data2023 = data
-                        .filter(item => item.year === 2023)
-                        .map(item => item.rainfall_mm);
-
+                    const data1998 = data.filter(item => item.year === 1998).map(item => item.rainfall_mm);
+                    const data2023 = data.filter(item => item.year === 2023).map(item => item.rainfall_mm);
                     new Chart(comparisonChartCanvas, {
                         type: 'bar',
                         data: {
@@ -230,12 +161,47 @@ document.addEventListener("DOMContentLoaded", function () {
                                 }
                             ]
                         },
-                        options: comparisonChartOptions // Menggunakan opsi dengan legenda
+                        options: comparisonChartOptions
                     });
                     console.log("Comparison chart initialized with LIVE API data.");
-                
                 })
                 .catch(error => console.error("Gagal mengambil data API Comparison:", error));
         }
     }
+    
+    // ==========================================================
+    // LOGIKA BARU UNTUK HALAMAN FORECAST (/forecast)
+    // ==========================================================
+    const forecastOutlookTitle = document.getElementById('forecast-outlook-title');
+    
+    // Periksa apakah kita ada di halaman forecast
+    if (forecastOutlookTitle) {
+        console.log("Forecast page initializing...");
+        
+        // Ambil data dari API forecast
+        fetch('/api/seasonal-forecast')
+            .then(response => response.json())
+            .then(data => {
+                
+                // data sekarang adalah object: { seasonal_outlook: {...}, monsoon_onset: {...} }
+                
+                const outlook = data.seasonal_outlook;
+                const onset = data.monsoon_onset;
+
+                if (outlook) {
+                    document.getElementById('forecast-outlook-title').textContent = outlook.title;
+                    // Kita gunakan 'innerHTML' di sini agar tag <strong> bisa di-render
+                    document.getElementById('forecast-outlook-content').innerHTML = outlook.content; 
+                }
+                
+                if (onset) {
+                    document.getElementById('forecast-onset-title').textContent = onset.title;
+                    document.getElementById('forecast-onset-content').textContent = onset.content;
+                }
+                
+                console.log("Forecast data loaded into page.");
+            })
+            .catch(error => console.error("Gagal mengambil data API Forecast:", error));
+    }
+    
 });

@@ -5,8 +5,13 @@ use App\Http\Controllers\Api\RainfallDataController;
 use App\Http\Controllers\Api\WindSpeedDataController;
 use App\Http\Controllers\Api\HistoricalRainfallController;
 use App\Http\Controllers\Api\WindMapDataController;
+use App\Http\Controllers\Api\ForecastController; // <-- BARIS BARU
 
-
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,7 +23,11 @@ Route::get('/rainfall-stats', [RainfallDataController::class, 'index']);
 // API #2
 Route::get('/wind-speed-stats', [WindSpeedDataController::class, 'index']);
 
-// API #3 (BARU)
+// API #3
 Route::get('/comparison-data', [HistoricalRainfallController::class, 'index']);
 
+// API #4
 Route::get('/wind-map-data', [WindMapDataController::class, 'index']);
+
+// API #5 (BARU)
+Route::get('/seasonal-forecast', [ForecastController::class, 'index']);

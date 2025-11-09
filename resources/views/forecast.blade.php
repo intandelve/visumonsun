@@ -3,21 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forecast Page - VisuMonsun ID</title>
+    <title>Forecast - VisuMonsun ID</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- CSS Leaflet (jika diperlukan untuk peta anomali) -->
+    <!-- CSS Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .chart-placeholder {
-            min-height: 384px; /* h-96 */
-            position: relative;
-        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
@@ -50,64 +46,65 @@
         <!-- Page Title -->
         <h1 class="text-3xl font-bold text-gray-800">Seasonal Forecast</h1>
 
-        <!-- Summary & Download Section -->
+        <!-- Forecast Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Narrative Summary -->
-            <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg">
-                <h2 class="text-xl font-bold mb-4">Seasonal Outlook (Next 3 Months)</h2>
-                <div class="space-y-4 text-gray-700">
-                    <p>Based on the latest LSTM model run, the upcoming wet season onset for West Java is predicted to be **slightly delayed**, starting around the **second week of December 2025**.</p>
-                    <p>Rainfall intensity is expected to be **10-15% above average (wetter)**, particularly in western and central parts of Indonesia, indicating a potential moderate La Niña influence.</p>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                        <h3 class="font-semibold text-blue-800">Monsoon Onset Prediction</h3>
-                        <p class="text-blue-700">Predicted Start for West Java: <strong class="text-lg">Dec 8 - 14, 2025</strong></p>
-                    </div>
+            
+            <!-- Kolom Kiri: Ringkasan & Download -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Main Outlook -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <!-- ID BARU DI SINI -->
+                    <h2 id="forecast-outlook-title" class="text-2xl font-bold mb-4">Loading forecast...</h2>
+                    <!-- ID BARU DI SINI -->
+                    <p id="forecast-outlook-content" class="text-gray-600 leading-relaxed">Please wait, fetching the latest seasonal outlook from our model...</p>
+                </div>
+                
+                <!-- Onset Prediction -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg">
+                    <!-- ID BARU DI SINI -->
+                    <h3 id="forecast-onset-title" class="text-xl font-bold text-blue-800 mb-2">Loading onset data...</h3>
+                    <!-- ID BARU DI SINI -->
+                    <p id="forecast-onset-content" class="text-blue-700 font-medium">Please wait...</p>
                 </div>
             </div>
             
-            <!-- Download Report Card -->
-            <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col">
-                <h2 class="text-xl font-bold mb-4">Download Full Report</h2>
-                <p class="text-gray-600 mb-4 text-sm">Get the detailed PDF report for a specific region.</p>
-                <div>
-                    <label for="region-report" class="block text-sm font-semibold text-gray-600 mb-1">Select Region</label>
-                    <select id="region-report" class="w-full p-2 border border-gray-300 rounded-lg mb-4">
-                        <option>West Java</option>
-                        <option>Central Java</option>
-                        <option>Kalimantan</option>
-                        <option>All Indonesia</option>
-                    </select>
-                </div>
-                <button class="w-full bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition duration-300 mt-auto">
+            <!-- Kolom Kanan: Download -->
+            <div class="bg-white p-6 rounded-xl shadow-lg h-fit">
+                <h3 class="text-xl font-bold mb-4">Download Full Report</h3>
+                <p class="text-gray-600 text-sm mb-4">Get the detailed PDF report for a specific region.</p>
+                <label for="region-select" class="block text-sm font-semibold text-gray-700 mb-2">Select Region</label>
+                <select id="region-select" class="w-full p-3 border border-gray-300 rounded-lg mb-4">
+                    <option>West Java</option>
+                    <option>Central Java</option>
+                    <option>East Java</option>
+                </select>
+                <button class="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
                     Download PDF
                 </button>
             </div>
+            
         </div>
-
-        <!-- Anomaly Maps Section -->
-        <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h2 class="text-xl font-bold mb-4">Forecast Anomaly Maps</h2>
-            <p class="text-gray-600 mb-4">Comparing predicted conditions against the 30-year average.</p>
+        
+        <!-- Peta Anomali (Masih Statis) -->
+        <div class="bg-white p-6 rounded-xl shadow-lg mt-6">
+            <h2 class="text-2xl font-bold mb-4">Forecast Anomaly Maps</h2>
+            <p class="text-gray-600 mb-6">Comparing predicted conditions against the 30-year average.</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Rainfall Anomaly Map -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">Rainfall Anomaly (Next 3 Months)</h3>
-                    <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                    <h3 class="font-semibold text-lg text-center mb-2">Rainfall Anomaly (Next 3 Months)</h3>
+                    <div class="w-full h-80 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
                         [Placeholder Peta Anomali Curah Hujan]
                     </div>
-                    <p class="text-sm text-gray-500 mt-2">Map shows areas predicted to be wetter (blue) or drier (brown) than normal.</p>
                 </div>
-                
-                <!-- Wind Anomaly Map -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-2">Wind Pattern Anomaly (850mb)</h3>
-                    <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-                         [Placeholder Peta Anomali Angin]
+                    <h3 class="font-semibold text-lg text-center mb-2">Wind Pattern Anomaly (850mb)</h3>
+                     <div class="w-full h-80 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
+                        [Placeholder Peta Anomali Angin]
                     </div>
-                     <p class="text-sm text-gray-500 mt-2">Map shows predicted wind flow deviations from the seasonal average.</p>
                 </div>
             </div>
         </div>
+
     </main>
     
     <!-- Footer -->
@@ -115,11 +112,16 @@
         © 2025 VisuMonsun ID. All data provided by Copernicus Climate Change Service.
     </footer>
     
-    <!-- Library Chart.js & Leaflet -->
+    <!-- Library Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Library Leaflet -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-velocity@1.1.0/dist/leaflet-velocity.min.js"></script>
     
     <!-- JavaScript Kustom Anda -->
     <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 </html>

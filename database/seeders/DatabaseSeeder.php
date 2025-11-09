@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
                 WindSpeedDataSeeder::class, 
                 HistoricalRainfallSeeder::class,
                 WindMapDataSeeder::class,
+                ForecastSeeder::class,
             ]);
         }
 }
