@@ -27,7 +27,6 @@ try:
     c.retrieve(
         'reanalysis-era5-land-monthly-means',
         {
-            'product_type': 'monthly_averaged_reanalysis',
             'variable': 'total_precipitation',
             'year': '2023',
             'month': [
