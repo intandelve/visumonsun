@@ -1,17 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Forecasts Management') }}
         </h2>
     </x-slot>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 text-gray-900">
             
-            <h3 class="text-2xl font-semibold mb-4">Rainfall Data Management</h3>
+            <h3 class="text-2xl font-semibold mb-4">Forecasts Management</h3>
             
             <p class="mb-6">
-                Ini adalah data yang saat ini ditampilkan di Halaman Statistik Anda.
+                Ini adalah data yang saat ini ditampilkan di Halaman Forecast (User Side).
             </p>
 
             <div class="overflow-x-auto rounded-lg border border-gray-200">
@@ -19,24 +19,24 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">ID</th>
-                            <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">Month</th>
-                            <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">Rainfall (mm)</th>
+                            <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">Data Type</th>
+                            <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">Title</th>
                             <th class="whitespace-nowrap px-4 py-3 text-left font-medium text-gray-900">Action</th>
                         </tr>
                     </thead>
     
                     <tbody class="divide-y divide-gray-200">
-                        @foreach ($rainfall_data as $data)
+                        @foreach ($forecasts as $data)
                             <tr>
                                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ $data->id }}</td>
-                                <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $data->month_name }}</td>
-                                <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $data->rainfall_mm }}</td>
+                                <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $data->data_type }}</td>
+                                <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $data->title }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 flex items-center space-x-2">
-                                    <a href="{{ route('rainfall.edit', $data->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                    <a href="{{ route('admin.forecasts.edit', $data->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
                                         Edit
                                     </a>
                                     
-                                    <form method="POST" action="{{ route('rainfall.destroy', $data->id) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                    <form method="POST" action="{{ route('admin.forecasts.destroy', $data->id) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">
