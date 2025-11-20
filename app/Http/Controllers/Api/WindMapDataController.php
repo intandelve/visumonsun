@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\WindMapData; // <-- PENTING
+use App\Models\WindMapData; 
 use Illuminate\Support\Facades\File;
 
 class WindMapDataController extends Controller
@@ -16,7 +16,6 @@ class WindMapDataController extends Controller
                             ->first();
 
         if ($mapData) {
-            // If the DB row contains a small pointer to a file (to avoid huge DB packets), read and return file contents.
             $json = $mapData->json_data;
             if (is_array($json) && isset($json['file'])) {
                 $filePath = public_path($json['file']);
