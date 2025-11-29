@@ -50,13 +50,20 @@ class ForecastController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'data_type' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
         $forecast = Forecast::findOrFail($id);
         
+        $forecast->data_type = $request->data_type;
         $forecast->title = $request->title;
         $forecast->content = $request->content;
         $forecast->save();
 
-        return redirect()->route('admin.forecasts.index');
+        return redirect()->route('admin.forecasts.index')->with('success', 'Forecast updated successfully.');
     }
 
     public function destroy($id)

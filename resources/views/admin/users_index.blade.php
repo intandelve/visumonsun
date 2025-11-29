@@ -37,23 +37,22 @@
                                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ $user->id }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->name }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->email }}</td>
-                                <td class="whitespace-nowrap px-4 py-2 flex items-center space-x-2">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}"
-                                       class="inline-flex items-center gap-2 rounded text-sm font-medium"
-                                       title="Edit"
-                                       style="background:#4f46e5;color:#ffffff;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;z-index:10;min-width:56px;text-align:center;">
-                                        Edit
-                                    </a>
+                                <td class="whitespace-nowrap px-4 py-2">
+                                    <div class="flex items-center space-x-2">
+                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                            Edit
+                                        </a>
 
-                                    <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700
-                                                        @if($user->id == Auth::id()) opacity-50 cursor-not-allowed @endif"
-                                                @if($user->id == Auth::id()) disabled @endif>
-                                            Delete
-                                        </button>
-                                    </form>
+                                        <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700
+                                                            @if($user->id == Auth::id()) opacity-50 cursor-not-allowed @endif"
+                                                    @if($user->id == Auth::id()) disabled @endif>
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

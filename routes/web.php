@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('home');
-})->name('home');
+});
 
 Route::get('/statistics', function () {
     return view('statistics');
@@ -28,26 +28,26 @@ Route::get('/contact', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Profile is available to any authenticated user
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // User dashboard (regular authenticated users)
+    
+    // User Dashboard (for regular users)
     Route::get('/dashboard', function () {
-        return view('user.dashboard');
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return view('user_dashboard');
     })->name('dashboard');
 
-    // Admin-only routes
-    Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
-        Route::get('/admin/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
+    // Admin Routes
+    Route::middleware('admin')->prefix('admin')->group(function () {
+        // Admin Dashboard (formerly Rainfall Index)
+        Route::get('/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
 
         Route::get('/rainfall/create', [RainfallController::class, 'create'])->name('rainfall.create');
         Route::post('/rainfall', [RainfallController::class, 'store'])->name('rainfall.store');
         Route::get('/rainfall/{id}/edit', [RainfallController::class, 'edit'])->name('rainfall.edit');
         Route::patch('/rainfall/{id}', [RainfallController::class, 'update'])->name('rainfall.update');
         Route::delete('/rainfall/{id}', [RainfallController::class, 'destroy'])->name('rainfall.destroy');
-
+    
         Route::get('/wind-data', [WindSpeedController::class, 'index'])->name('admin.wind_data.index');
         Route::get('/wind-data/create', [WindSpeedController::class, 'create'])->name('admin.wind_data.create');
         Route::post('/wind-data', [WindSpeedController::class, 'store'])->name('admin.wind_data.store');
@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/forecasts/{id}/edit', [ForecastController::class, 'edit'])->name('admin.forecasts.edit');
         Route::patch('/forecasts/{id}', [ForecastController::class, 'update'])->name('admin.forecasts.update');
         Route::delete('/forecasts/{id}', [ForecastController::class, 'destroy'])->name('admin.forecasts.destroy');
-
+    
         Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
         Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
         Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
@@ -69,6 +69,10 @@ Route::middleware('auth')->group(function () {
         Route::patch('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
     });
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

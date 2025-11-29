@@ -17,6 +17,12 @@
                 @method('PATCH')
 
                 <div>
+                    <label for="data_type" class="block font-medium text-sm text-gray-700">Data Type</label>
+                    <input id="data_type" name="data_type" type="text" value="{{ $forecast->data_type }}" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required placeholder="e.g. Rainfall, Wind, etc.">
+                </div>
+
+                <div class="mt-4">
                     <label for="title" class="block font-medium text-sm text-gray-700">Title</label>
                     <input id="title" name="title" type="text" value="{{ $forecast->title }}" 
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>

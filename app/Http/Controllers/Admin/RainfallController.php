@@ -50,7 +50,7 @@ class RainfallController extends Controller
 
         $rainfall->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Rainfall data added successfully.');
+        return redirect()->route('dashboard')->with('success', 'Rainfall data added successfully.');
     }
 
     public function edit($id)
@@ -64,12 +64,30 @@ class RainfallController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'month_name' => 'required|string|max:255',
+            'rainfall_mm' => 'required|numeric',
+        ]);
+
         $rainfall = RainfallData::findOrFail($id);
         
+        $rainfall->month_name = $request->month_name;
         $rainfall->rainfall_mm = $request->rainfall_mm;
+
+        $months = [
+            'January' => 1, 'February' => 2, 'March' => 3, 'April' => 4, 'May' => 5, 'June' => 6,
+            'July' => 7, 'August' => 8, 'September' => 9, 'October' => 10, 'November' => 11, 'December' => 12
+        ];
+        
+        if (array_key_exists($request->month_name, $months)) {
+            $rainfall->month_index = $months[$request->month_name];
+        } else {
+             $rainfall->month_index = 0; 
+        }
+
         $rainfall->save();
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('dashboard')->with('success', 'Rainfall data updated successfully.');
     }
 
     public function destroy($id)
@@ -77,6 +95,6 @@ class RainfallController extends Controller
         $rainfall = RainfallData::findOrFail($id);
         $rainfall->delete();
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('dashboard');
     }
 }
