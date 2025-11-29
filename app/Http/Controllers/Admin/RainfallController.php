@@ -50,7 +50,7 @@ class RainfallController extends Controller
 
         $rainfall->save();
 
-        return redirect()->route('dashboard')->with('success', 'Rainfall data added successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Rainfall data added successfully.');
     }
 
     public function edit($id)
@@ -69,7 +69,7 @@ class RainfallController extends Controller
         $rainfall->rainfall_mm = $request->rainfall_mm;
         $rainfall->save();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('admin.dashboard');
     }
 
     public function destroy($id)
@@ -77,6 +77,6 @@ class RainfallController extends Controller
         $rainfall = RainfallData::findOrFail($id);
         $rainfall->delete();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('admin.dashboard');
     }
 }

@@ -38,7 +38,10 @@
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->name }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->email }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 flex items-center space-x-2">
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}"
+                                       class="inline-flex items-center gap-2 rounded text-sm font-medium"
+                                       title="Edit"
+                                       style="background:#4f46e5;color:#ffffff;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;z-index:10;min-width:56px;text-align:center;">
                                         Edit
                                     </a>
 

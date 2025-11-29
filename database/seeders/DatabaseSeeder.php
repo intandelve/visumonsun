@@ -16,11 +16,12 @@ class DatabaseSeeder extends Seeder
         public function run(): void
         {
             $this->call([
-                RainfallDataSeeder::class,
-                WindSpeedDataSeeder::class, 
-                HistoricalRainfallSeeder::class,
-                WindMapDataSeeder::class,
-                ForecastSeeder::class,
-            ]);
+                    AdminUserSeeder::class,
+                    RainfallDataSeeder::class,
+                    WindSpeedDataSeeder::class,
+                    HistoricalRainfallSeeder::class,
+                    WindMapDataSeeder::class,
+                    ForecastSeeder::class,
+                ]);
         }
 }
