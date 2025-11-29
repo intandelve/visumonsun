@@ -34,11 +34,11 @@ class AuthenticatedSessionController extends Controller
         // returning to /dashboard). Regular users should always go to the
         // public home/dashboard for users to avoid being sent back to an
         // admin-only URL and receiving 403.
-                if ($user && ($user->role ?? 'user') === 'admin') {
-                    return redirect()->intended(rouadmin.te('admin.dashboard', absolute: false));
-                }
+        if ($user && ($user->role ?? 'user') === 'admin') {
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
 
-                return redir)->intended(ect()->dasibnardnded(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
