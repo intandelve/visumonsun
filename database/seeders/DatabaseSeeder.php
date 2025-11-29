@@ -15,6 +15,22 @@ class DatabaseSeeder extends Seeder
      */
         public function run(): void
         {
+            // Admin User
+            User::factory()->create([
+                'name' => 'Admin User',
+                'email' => 'admin@admin.com',
+                'password' => 'password', // will be hashed by model/factory
+                'role' => 'admin',
+            ]);
+
+            // Regular User
+            User::factory()->create([
+                'name' => 'Regular User',
+                'email' => 'user@user.com',
+                'password' => 'password',
+                'role' => 'user',
+            ]);
+
             $this->call([
                 RainfallDataSeeder::class,
                 WindSpeedDataSeeder::class, 
