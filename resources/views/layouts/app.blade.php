@@ -58,7 +58,7 @@
                                 </div>
                             </div>
             
-                            <div class="w-full md:w-3/4">
+                            <div class="w-full md:flex-1">
                                 {{ $slot }}
                             </div>
             
