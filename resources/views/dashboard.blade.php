@@ -39,14 +39,17 @@
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $data->rainfall_mm }}</td>
                                 <td class="whitespace-nowrap px-4 py-2">
                                     <div class="flex items-center space-x-2">
-                                        <a href="{{ route('rainfall.edit', $data->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                        <a href="{{ route('rainfall.edit', $data->id) }}"
+                                           class="inline-flex items-center gap-2 rounded px-3 py-1 text-sm font-medium"
+                                           title="Edit"
+                                           style="background:#4f46e5;color:#ffffff;padding:6px 10px;border-radius:6px;display:inline-flex;align-items:center;z-index:10;min-width:56px;text-align:center;">
                                             Edit
                                         </a>
-                                        
+
                                         <form method="POST" action="{{ route('rainfall.destroy', $data->id) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="inline-block rounded bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700">
+                                            <button type="submit" class="inline-flex items-center gap-2 rounded bg-red-600 px-3 py-1 text-sm font-medium text-white hover:bg-red-700">
                                                 Delete
                                             </button>
                                         </form>

@@ -18,7 +18,7 @@
 
                 <div>
                     <label for="data_type" class="block font-medium text-sm text-gray-700">Data Type</label>
-                    <input id="data_type" name="data_type" type="text" value="{{ $forecast->data_type }}" 
+                    <input id="data_type" name="data_type" type="text" value="{{ $forecast->data_type }}"
                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required placeholder="e.g. Rainfall, Wind, etc.">
                 </div>
 

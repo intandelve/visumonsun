@@ -108,8 +108,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // --- BUAT VELOCITY LAYER ---
                 // Use a more conservative default scale; users complained vectors were too large.
-                // You can tune `velocityScale` to taste. Typical values: 0.02 - 0.5 depending on zoom.
-                const defaultVelocityScale = 0.5;
+                // You can tune `velocityScale` to taste. Typical values: 0.02 - 0.4 depending on zoom.
+                const defaultVelocityScale = 0.12;
 
                 velocityLayer = L.velocityLayer({
                     displayValues: true,
