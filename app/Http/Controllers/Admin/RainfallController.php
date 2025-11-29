@@ -12,7 +12,7 @@ class RainfallController extends Controller
     {
         $rainfallData = RainfallData::orderBy('month_index', 'asc')->get();
 
-        return view('dashboard', [
+        return view('admin.rainfall.index', [
             'rainfall_data' => $rainfallData
         ]);
     }
