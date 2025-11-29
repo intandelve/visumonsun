@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\RainfallController;
 use App\Http\Controllers\Admin\WindSpeedController;
 use App\Http\Controllers\Admin\ForecastController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('home');
@@ -28,7 +29,14 @@ Route::get('/contact', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [RainfallController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        if (Auth::user() && (Auth::user()->role ?? 'user') === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return view('user_dashboard');
+    })->name('dashboard');
+
+    Route::get('/admin/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
     
     Route::get('/rainfall/create', [RainfallController::class, 'create'])->name('rainfall.create');
     Route::post('/rainfall', [RainfallController::class, 'store'])->name('rainfall.store');

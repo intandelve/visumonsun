@@ -70,6 +70,24 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if (Auth::user() && (Auth::user()->role ?? 'user') === 'admin')
+            <div class="border-t border-gray-200 pt-2 mt-2">
+                <div class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Admin Menu</div>
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard*')">
+                    {{ __('Rainfall Data') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.wind_data.index')" :active="request()->routeIs('admin.wind_data*')">
+                    {{ __('Wind Data') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.forecasts.index')" :active="request()->routeIs('admin.forecasts*')">
+                    {{ __('Forecasts') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users*')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
+            </div>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
