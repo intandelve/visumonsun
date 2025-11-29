@@ -28,7 +28,17 @@ Route::get('/contact', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [RainfallController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('user_dashboard');
+    })->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
     
     Route::get('/rainfall/create', [RainfallController::class, 'create'])->name('rainfall.create');
     Route::post('/rainfall', [RainfallController::class, 'store'])->name('rainfall.store');
@@ -56,10 +66,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::patch('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
