@@ -107,9 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 // --- BUAT VELOCITY LAYER ---
-                // Use a more conservative default scale; users complained vectors were too large.
-                // You can tune `velocityScale` to taste. Typical values: 0.02 - 0.4 depending on zoom.
-                const defaultVelocityScale = 0.12;
+                // Use a larger default scale; users complained vectors were too small.
+                // You can tune `velocityScale` to taste. Increased to 5.0 based on user feedback.
+                const defaultVelocityScale = 5.0;
 
                 velocityLayer = L.velocityLayer({
                     displayValues: true,
@@ -121,8 +121,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     data: velocityData, // Gunakan data hasil konversi
                     // Max velocity shown in the legend (visual cap)
                     maxVelocity: 20,
-                    // Smaller default scale to avoid oversized vectors
+                    // Larger default scale to make vectors more visible
                     velocityScale: defaultVelocityScale,
+                    // Thicker lines for better visibility
+                    lineWidth: 3,
                 });
 
                 velocityLayer.addTo(map);
