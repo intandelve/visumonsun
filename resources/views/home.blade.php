@@ -47,9 +47,18 @@
         <div class="flex items-center space-x-4">
              <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-50 transition duration-300">EN</button>
              
-             <!-- Link Login/Register Baru dari Breeze -->
-             <a href="/login" class="text-sm font-medium text-gray-600 hover:text-gray-900">Log in</a>
-             <a href="/register" class="text-sm font-medium text-blue-600 hover:text-blue-700">Register</a>
+             @auth
+                 <a href="{{ url('/dashboard') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">Dashboard</a>
+                 <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="text-sm font-medium text-gray-600 hover:text-gray-900 ml-4">
+                        {{ __('Log Out') }}
+                    </button>
+                 </form>
+             @else
+                 <a href="/login" class="text-sm font-medium text-gray-600 hover:text-gray-900">Log in</a>
+                 <a href="/register" class="text-sm font-medium text-blue-600 hover:text-blue-700">Register</a>
+             @endauth
         </div>
     </header>
 
