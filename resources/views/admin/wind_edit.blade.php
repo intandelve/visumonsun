@@ -18,8 +18,11 @@
 
                 <div>
                     <label for="month_name" class="block font-medium text-sm text-gray-700">Month</label>
-                    <input id="month_name" name="month_name" type="text" value="{{ $wind_speed->month_name }}" 
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" readonly disabled>
+                    <select id="month_name" name="month_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                        @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                            <option value="{{ $month }}" {{ $wind_speed->month_name == $month ? 'selected' : '' }}>{{ $month }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="mt-4">
