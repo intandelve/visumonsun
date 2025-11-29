@@ -14,6 +14,12 @@
                 Ini adalah daftar semua akun yang memiliki akses ke Admin Side.
             </p>
 
+            <div class="mb-4">
+                <a href="{{ route('admin.users.create') }}" class="inline-block rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700">
+                    Add User
+                </a>
+            </div>
+
             <div class="overflow-x-auto rounded-lg border border-gray-200">
                 <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
                     <thead class="bg-gray-50">
@@ -31,7 +37,11 @@
                                 <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ $user->id }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->name }}</td>
                                 <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ $user->email }}</td>
-                                <td class="whitespace-nowrap px-4 py-2">
+                                <td class="whitespace-nowrap px-4 py-2 flex items-center space-x-2">
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">
+                                        Edit
+                                    </a>
+
                                     <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" onsubmit="return confirm('Are you sure you want to delete this user?');">
                                         @csrf
                                         @method('DELETE')
