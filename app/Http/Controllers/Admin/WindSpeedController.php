@@ -17,6 +17,38 @@ class WindSpeedController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return view('admin.wind_create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'month_name' => 'required|string|max:255',
+            'speed_ms' => 'required|numeric',
+        ]);
+
+        $windSpeed = new WindSpeedData();
+        $windSpeed->month_name = $request->month_name;
+        $windSpeed->speed_ms = $request->speed_ms;
+
+        $months = [
+            'January' => 1, 'February' => 2, 'March' => 3, 'April' => 4, 'May' => 5, 'June' => 6,
+            'July' => 7, 'August' => 8, 'September' => 9, 'October' => 10, 'November' => 11, 'December' => 12
+        ];
+
+        if (array_key_exists($request->month_name, $months)) {
+            $windSpeed->month_index = $months[$request->month_name];
+        } else {
+             $windSpeed->month_index = 0;
+        }
+
+        $windSpeed->save();
+
+        return redirect()->route('admin.wind_data.index')->with('success', 'Wind speed data added successfully.');
+    }
+
     public function edit($id)
     {
         $windSpeed = WindSpeedData::findOrFail($id);
@@ -28,12 +60,30 @@ class WindSpeedController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'month_name' => 'required|string|max:255',
+            'speed_ms' => 'required|numeric',
+        ]);
+
         $windSpeed = WindSpeedData::findOrFail($id);
         
+        $windSpeed->month_name = $request->month_name;
         $windSpeed->speed_ms = $request->speed_ms;
+
+        $months = [
+            'January' => 1, 'February' => 2, 'March' => 3, 'April' => 4, 'May' => 5, 'June' => 6,
+            'July' => 7, 'August' => 8, 'September' => 9, 'October' => 10, 'November' => 11, 'December' => 12
+        ];
+
+        if (array_key_exists($request->month_name, $months)) {
+            $windSpeed->month_index = $months[$request->month_name];
+        } else {
+             $windSpeed->month_index = 0;
+        }
+
         $windSpeed->save();
 
-        return redirect()->route('admin.wind_data.index');
+        return redirect()->route('admin.wind_data.index')->with('success', 'Wind speed data updated successfully.');
     }
 
     public function destroy($id)
