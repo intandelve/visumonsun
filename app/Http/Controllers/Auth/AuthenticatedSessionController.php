@@ -50,7 +50,14 @@ class AuthenticatedSessionController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
+            if (Auth::guard('web')->user()->role !== 'admin') {
+                Auth::guard('web')->logout();
+                return back()->withErrors([
+                    'email' => __('Not authorized as admin.'),
+                ]);
+            }
+
             $request->session()->regenerate();
             return redirect()->intended(route('admin.dashboard', absolute: false));
         }
