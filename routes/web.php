@@ -28,8 +28,19 @@ Route::get('/contact', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [RainfallController::class, 'index'])->name('dashboard');
-    
+    // Normal User Dashboard
+    Route::get('/dashboard', function () {
+        return view('user_dashboard');
+    })->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
+
     Route::get('/rainfall/create', [RainfallController::class, 'create'])->name('rainfall.create');
     Route::post('/rainfall', [RainfallController::class, 'store'])->name('rainfall.store');
     Route::get('/rainfall/{id}/edit', [RainfallController::class, 'edit'])->name('rainfall.edit');
@@ -42,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/wind-data/{id}/edit', [WindSpeedController::class, 'edit'])->name('admin.wind_data.edit');
     Route::patch('/wind-data/{id}', [WindSpeedController::class, 'update'])->name('admin.wind_data.update');
     Route::delete('/wind-data/{id}', [WindSpeedController::class, 'destroy'])->name('admin.wind_data.destroy');
-    
+
     Route::get('/forecasts', [ForecastController::class, 'index'])->name('admin.forecasts.index');
     Route::get('/forecasts/create', [ForecastController::class, 'create'])->name('admin.forecasts.create');
     Route::post('/forecasts', [ForecastController::class, 'store'])->name('admin.forecasts.store');
@@ -56,10 +67,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::patch('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
