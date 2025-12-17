@@ -35,7 +35,7 @@
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    {{ __('Forgot your password? ') }}
                 </a>
             @endif
 
@@ -44,9 +44,10 @@
             </x-primary-button>
         </div>
 
+        <!-- Admin Login Link (Optional) -->
         <div class="mt-4 text-center">
-            <a href="{{ route('login.admin') }}" class="text-sm text-gray-500 hover:text-gray-900 underline">
-                {{ __('Log in as Admin') }}
+            <a href="{{ route('admin.login') }}" class="text-xs text-gray-400 hover:text-gray-600">
+                {{ __('Staff Area') }}
             </a>
         </div>
     </form>

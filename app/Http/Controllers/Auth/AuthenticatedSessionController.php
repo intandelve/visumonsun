@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Display the admin login view.
+     * Display the admin login view. 
      */
     public function createAdmin(): View
     {
@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Handle an incoming authentication request. 
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -36,11 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        if ($request->user()->role === 'admin') {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        }
-
-        return redirect()->intended('/');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
@@ -51,20 +47,21 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
+            // Cek apakah user adalah admin
             if (Auth::guard('web')->user()->role !== 'admin') {
                 Auth::guard('web')->logout();
                 return back()->withErrors([
-                    'email' => __('Not authorized as admin.'),
-                ]);
+                    'email' => __('You are not authorized to access admin area. '),
+                ])->withInput($request->only('email'));
             }
 
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard', absolute: false));
+            return redirect()->intended(route('admin. dashboard', absolute: false));
         }
 
         return back()->withErrors([
             'email' => __('auth.failed'),
-        ]);
+        ])->withInput($request->only('email'));
     }
 
     /**
@@ -72,7 +69,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth:: guard('web')->logout();
 
         $request->session()->invalidate();
 

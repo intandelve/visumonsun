@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+// User Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
@@ -22,16 +23,10 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('loginadmin', [AuthenticatedSessionController::class, 'createAdmin'])
-        ->name('login.admin');
-
-    Route::post('loginadmin', [AuthenticatedSessionController::class, 'storeAdmin'])
-        ->name('login.admin.store');
-
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    Route::post('forgot-password', [PasswordResetLinkController:: class, 'store'])
         ->name('password.email');
 
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
@@ -41,12 +36,22 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
+// Admin Authentication Routes
+Route:: prefix('admin')->name('admin.')->middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController:: class, 'createAdmin'])
+        ->name('login');
+    
+    Route::post('login', [AuthenticatedSessionController::class, 'storeAdmin'])
+        ->name('login.store');
+});
+
+// Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 
     Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
+        ->middleware(['signed', 'throttle: 6,1'])
         ->name('verification.verify');
 
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
