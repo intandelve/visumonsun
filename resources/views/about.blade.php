@@ -42,47 +42,125 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow p-4 lg:p-6 space-y-6">
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white py-16 px-4">
+            <div class="max-w-5xl mx-auto text-center">
+                <h1 class="text-5xl font-bold mb-4">Understanding Monsoons in Indonesia</h1>
+                <p class="text-xl text-blue-50 max-w-3xl mx-auto">Explore the science behind monsoon patterns and their impact on life in the archipelago</p>
+            </div>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-4 -mt-8 pb-12 space-y-12">
             
-            <!-- Page Title -->
-            <h1 class="text-4xl font-bold text-gray-800 text-center mb-8">About VisuMonsun ID</h1>
-            
-            <!-- Our Mission -->
-            <div class="mb-10">
-                <h2 class="text-2xl font-bold text-blue-600 mb-4">Our Mission</h2>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    VisuMonsun ID is a specialized web platform dedicated to the visualization and forecasting of wind and monsoon patterns in Indonesia. Our mission is to transform complex atmospheric data into clear, actionable insights for researchers, industry sectors (like agriculture, maritime, and renewable energy), and the public.
+            <!-- What is Monsoon -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="bg-blue-100 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800">What is a Monsoon?</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed text-lg mb-4">
+                    A monsoon is a <strong>seasonal wind system</strong> that reverses direction every six months, bringing dramatic changes in rainfall patterns. In Indonesia, there are two main monsoons:
                 </p>
-                <p class="text-gray-600 leading-relaxed text-lg mt-4">
-                    By providing detailed historical analysis and AI-driven forecasts, we aim to enhance preparedness and decision-making related to seasonal weather phenomena.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-500">
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">🌧️ Southwest Monsoon (Nov - Mar)</h3>
+                        <p class="text-gray-700">Brings the <strong>wet season</strong> from the Indian Ocean, causing high rainfall across most of Indonesia.</p>
+                    </div>
+                    <div class="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-500">
+                        <h3 class="text-xl font-bold text-orange-800 mb-2">☀️ Northeast Monsoon (Apr - Oct)</h3>
+                        <p class="text-gray-700">Brings the <strong>dry season</strong> from the Asian and Australian continents, with minimal rainfall.</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Data Source & Technology -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                <!-- Data Source -->
-                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Data Source: ERA5</h3>
-                    <p class="text-gray-600">
-                        Our platform is powered by **ERA5**, the fifth generation atmospheric reanalysis dataset from the Copernicus Climate Change Service (C3S). We use this high-resolution data to analyze decades of wind, rainfall, and pressure patterns.
-                    </p>
-                </div>
-                <!-- Technology -->
-                <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-                    <h3 class="text-xl font-bold text-gray-800 mb-3">Technology</h3>
-                    <p class="text-gray-600">
-                        Our forecast models are built using **Python** with **LSTM (Deep Learning)** and **Prophet**. The web platform is driven by a **Laravel (PHP)** backend and a modern **JavaScript** (Leaflet.js, Chart.js) frontend.
-                    </p>
+            <!-- Why Monsoons Matter -->
+            <div class="bg-gradient-to-br from-indigo-600 to-blue-600 p-8 rounded-2xl shadow-xl text-white">
+                <h2 class="text-3xl font-bold mb-6 flex items-center space-x-3">
+                    <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                    </svg>
+                    <span>Why Monsoons Matter?</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white/10 backdrop-blur p-5 rounded-xl">
+                        <div class="text-4xl mb-3">🌾</div>
+                        <h3 class="font-bold text-lg mb-2">Agriculture</h3>
+                        <p class="text-blue-100">80% of Indonesia's rice production depends on monsoon rainfall. Monsoon onset predictions help farmers determine optimal planting times.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur p-5 rounded-xl">
+                        <div class="text-4xl mb-3">🌊</div>
+                        <h3 class="font-bold text-lg mb-2">Maritime</h3>
+                        <p class="text-blue-100">Monsoon winds affect ocean currents, waves, and navigation safety. Fishermen use these patterns to determine fishing locations.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur p-5 rounded-xl">
+                        <div class="text-4xl mb-3">⚡</div>
+                        <h3 class="font-bold text-lg mb-2">Energy</h3>
+                        <p class="text-blue-100">Monsoon wind speeds determine wind energy potential. This data is crucial for planning wind power generation facilities.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Team (Placeholder) -->
-            <div>
-                <h2 class="text-2xl font-bold text-blue-600 mb-4">Our Team</h2>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    We are a dedicated team of meteorologists, data scientists, and software engineers passionate about making climate data accessible and understandable.
-                </p>
+            <!-- Climate Phenomena -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Related Climate Phenomena</h2>
+                <div class="space-y-6">
+                    <div class="border-l-4 border-red-500 pl-6 py-3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">🔥 El Niño (Extreme Drought)</h3>
+                        <p class="text-gray-600">Pacific Ocean warming that causes <strong>delayed wet monsoons</strong> and prolonged droughts. Can trigger forest fires and severe water shortages.</p>
+                    </div>
+                    <div class="border-l-4 border-blue-500 pl-6 py-3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">💧 La Niña (Extreme Rainfall)</h3>
+                        <p class="text-gray-600">Pacific Ocean cooling that <strong>strengthens wet monsoons</strong>, causing floods and landslides across various regions of Indonesia.</p>
+                    </div>
+                    <div class="border-l-4 border-green-500 pl-6 py-3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">🌀 Indian Ocean Dipole</h3>
+                        <p class="text-gray-600">Temperature differences between the western and eastern Indian Ocean that influence monsoon intensity in western Indonesia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Mission & Technology -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">🎯 Our Mission</h2>
+                    <p class="text-gray-600 leading-relaxed mb-4">
+                        VisuMonsun ID exists to <strong>transform complex climate data</strong> into understandable and actionable insights.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        We provide real-time wind pattern visualizations, historical rainfall analysis, and AI-based monsoon predictions to support decision-making across various sectors.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">🔬 Technology</h2>
+                    <div class="space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-2xl">📊</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Data: ERA5 Reanalysis</p>
+                                <p class="text-sm text-gray-600">Copernicus Climate Service - resolusi 0.25° (±30km)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-2xl">🤖</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Model: LSTM & Prophet</p>
+                                <p class="text-sm text-gray-600">Deep Learning untuk prediksi pola musiman</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <span class="text-2xl">🗺️</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Visualisasi: Leaflet Velocity</p>
+                                <p class="text-sm text-gray-600">Real-time animated wind field</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
