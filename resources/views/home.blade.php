@@ -26,41 +26,39 @@
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
 
     <!-- Header / Navigation Bar -->
-    <header class="bg-white shadow-md p-4 flex justify-between items-center">
-    <div class="flex items-center space-x-2">
-        <h1 class="text-xl font-bold text-gray-800">VisuMonsun ID</h1>
-    </div>
-    
-    <nav class="hidden md:flex items-center space-x-6">
-        <a href="{{ route('home') }}" class="text-blue-600 font-semibold">Dashboard</a>
-        <a href="{{ route('statistics') }}" class="text-gray-500 hover:text-blue-600">Data Statistics</a>
-        <a href="{{ route('forecast') }}" class="text-gray-500 hover:text-blue-600">Forecast</a>
-        <a href="{{ route('about') }}" class="text-gray-500 hover:text-blue-600">About</a>
-        <a href="{{ route('contact') }}" class="text-gray-500 hover:text-blue-600">Contact</a>
-    </nav>
-    
-    <div class="flex items-center space-x-4">
-        @auth
-            @if(Auth::user()->role === 'admin')
-                <a href="{{ route('admin.dashboard') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">
-                    Admin Panel
-                </a>
-            @else
-                <span class="text-sm text-gray-600">{{ Auth::user()->name }}</span>
-            @endif
-            
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-sm font-medium text-gray-600 hover:text-gray-900">
-                    Log Out
-                </button>
-            </form>
-        @else
-            <!-- Tidak akan muncul karena route sudah protected -->
-            <a href="{{ route('login') }}">Log in</a>
-        @endauth
-    </div>
-</header>
+    <header class="bg-white shadow-md sticky top-0 z-50 p-4 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+            </svg>
+            <h1 class="text-xl font-bold text-gray-800">VisuMonsun ID</h1>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="hidden md:flex items-center space-x-6">
+            <a href="{{ route('home') }}" class="text-blue-600 font-semibold border-b-2 border-blue-600 pb-1">Dashboard</a>
+            <a href="{{ route('statistics') }}" class="text-gray-500 hover:text-blue-600 transition duration-300">Data Statistics</a>
+            <a href="{{ route('forecast') }}" class="text-gray-500 hover:text-blue-600 transition duration-300">Forecast</a>
+            <a href="{{ route('about') }}" class="text-gray-500 hover:text-blue-600 transition duration-300">About</a>
+            <a href="{{ route('contact') }}" class="text-gray-500 hover:text-blue-600 transition duration-300">Contact</a>
+        </nav>
+        
+        <!-- Auth Section -->
+        <div class="flex items-center space-x-4">
+            @auth
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="text-sm font-medium text-blue-600 hover:text-blue-700">Admin Panel</a>
+                @else
+                    <span class="text-sm text-gray-600">{{ Auth::user()->name }}</span>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="text-sm font-medium text-gray-600 hover:text-gray-900">Log Out</button>
+                </form>
+            @endauth
+        </div>
+    </header>
 
     <!-- Main Content -->
     <main class="flex-grow p-4 lg:p-6">
