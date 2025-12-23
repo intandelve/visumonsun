@@ -6,47 +6,71 @@ use App\Http\Controllers\Admin\RainfallController;
 use App\Http\Controllers\Admin\WindSpeedController;
 use App\Http\Controllers\Admin\ForecastController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Auth;
 
+// ✅ Halaman pertama = login (redirect dari root)
 Route::get('/', function () {
-    return view('home');
-});
+    if (Auth::check()) {
+        // Kalau sudah login
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('home');
+    }
+    // Kalau belum login, ke halaman login
+    return redirect()->route('login');
+})->name('root');
 
-Route::get('/statistics', function () {
-    return view('statistics');
-});
-
-Route::get('/forecast', function () {
-    return view('forecast');
-});
-
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
-
+// ✅ Routes untuk USER BIASA (harus login, read-only)
 Route::middleware('auth')->group(function () {
-    // Normal User Dashboard
+    // Home & Public Pages (protected, harus login)
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
+
+    Route::get('/statistics', function () {
+        return view('statistics');
+    })->name('statistics');
+
+    Route::get('/forecast', function () {
+        return view('forecast');
+    })->name('forecast');
+
+    Route::get('/about', function () {
+        return view('about');
+    })->name('about');
+
+    Route::get('/contact', function () {
+        return view('contact');
+    })->name('contact');
+
+    // User Dashboard (read-only)
     Route::get('/dashboard', function () {
+        // Kalau admin, redirect ke admin dashboard
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
         return view('user_dashboard');
     })->name('dashboard');
 
+    // Profile routes (user & admin bisa edit profile sendiri)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/profile', [ProfileController:: class, 'destroy'])->name('profile.destroy');
 });
 
+// ✅ Routes untuk ADMIN (harus login + role admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
 
+    // Rainfall CRUD
     Route::get('/rainfall/create', [RainfallController::class, 'create'])->name('rainfall.create');
     Route::post('/rainfall', [RainfallController::class, 'store'])->name('rainfall.store');
     Route::get('/rainfall/{id}/edit', [RainfallController::class, 'edit'])->name('rainfall.edit');
     Route::patch('/rainfall/{id}', [RainfallController::class, 'update'])->name('rainfall.update');
     Route::delete('/rainfall/{id}', [RainfallController::class, 'destroy'])->name('rainfall.destroy');
 
+    // Wind Data CRUD
     Route::get('/wind-data', [WindSpeedController::class, 'index'])->name('admin.wind_data.index');
     Route::get('/wind-data/create', [WindSpeedController::class, 'create'])->name('admin.wind_data.create');
     Route::post('/wind-data', [WindSpeedController::class, 'store'])->name('admin.wind_data.store');
@@ -54,19 +78,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::patch('/wind-data/{id}', [WindSpeedController::class, 'update'])->name('admin.wind_data.update');
     Route::delete('/wind-data/{id}', [WindSpeedController::class, 'destroy'])->name('admin.wind_data.destroy');
 
-    Route::get('/forecasts', [ForecastController::class, 'index'])->name('admin.forecasts.index');
+    // Forecast CRUD
+    Route::get('/forecasts', [ForecastController:: class, 'index'])->name('admin.forecasts.index');
     Route::get('/forecasts/create', [ForecastController::class, 'create'])->name('admin.forecasts.create');
-    Route::post('/forecasts', [ForecastController::class, 'store'])->name('admin.forecasts.store');
+    Route::post('/forecasts', [ForecastController:: class, 'store'])->name('admin.forecasts.store');
     Route::get('/forecasts/{id}/edit', [ForecastController::class, 'edit'])->name('admin.forecasts.edit');
     Route::patch('/forecasts/{id}', [ForecastController::class, 'update'])->name('admin.forecasts.update');
     Route::delete('/forecasts/{id}', [ForecastController::class, 'destroy'])->name('admin.forecasts.destroy');
 
+    // User Management CRUD
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('admin.users.create');
     Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
     Route::patch('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::delete('/users/{id}', [UserController:: class, 'destroy'])->name('admin.users.destroy');
 });
 
 require __DIR__.'/auth.php';

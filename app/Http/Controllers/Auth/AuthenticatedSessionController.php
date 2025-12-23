@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Show the user login form.
      */
     public function create(): View
     {
@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Display the admin login view. 
+     * Show the admin login form.
      */
     public function createAdmin(): View
     {
@@ -28,15 +28,17 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request. 
+     * Handle an incoming authentication request (user login).
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect admins to their dashboard, others to the user home.
+        return Auth::user()->role === 'admin'
+            ? redirect()->intended(route('admin.dashboard'))
+            : redirect()->intended(route('home'));
     }
 
     /**
@@ -47,16 +49,17 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
-            // Cek apakah user adalah admin
             if (Auth::guard('web')->user()->role !== 'admin') {
                 Auth::guard('web')->logout();
+
                 return back()->withErrors([
-                    'email' => __('You are not authorized to access admin area. '),
+                    'email' => __('You are not authorized to access admin area.'),
                 ])->withInput($request->only('email'));
             }
 
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard', absolute: false));
+
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         return back()->withErrors([
@@ -69,12 +72,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth:: guard('web')->logout();
+        Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
