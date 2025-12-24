@@ -210,65 +210,94 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                // Pick the element with the largest grid (nx*ny) or longest data array
-                let wind;
-                if (Array.isArray(data)) {
-                    wind = data.reduce((best, item) => {
-                        const itemSize =
-                            item &&
-                            item.header &&
-                            item.header.nx &&
-                            item.header.ny
-                                ? item.header.nx * item.header.ny
-                                : item && item.data
-                                ? item.data.length
-                                : 0;
-                        const bestSize =
-                            best &&
-                            best.header &&
-                            best.header.nx &&
-                            best.header.ny
-                                ? best.header.nx * best.header.ny
-                                : best && best.data
-                                ? best.data.length
-                                : 0;
-                        return itemSize > bestSize ? item : best;
-                    }, data[0]);
+                // Build velocity data from either array-of-records [U,V] or point payload
+                let velocityData;
+                if (
+                    Array.isArray(data) &&
+                    data[0]?.header &&
+                    Array.isArray(data[0]?.data) &&
+                    typeof data[0].data[0] === "number"
+                ) {
+                    // Already in Leaflet-Velocity format: [U-record, V-record]
+                    velocityData = data;
+                    currentWindData = null; // arrows need points; skip for grid arrays
                 } else {
-                    wind = data;
+                    // Single object with {header, data:[{lat,lon,u,v}]}
+                    const wind = Array.isArray(data) ? data[0] : data;
+                    if (!wind || !Array.isArray(wind.data)) {
+                        console.error("Wind data format invalid:", wind);
+                        return;
+                    }
+
+                    // Convert points to grid arrays ordered north→south, west→east
+                    const headerU = completeVelocityHeader(
+                        wind.header,
+                        wind.data,
+                        {
+                            parameterCategory: 2,
+                            parameterNumber: 2,
+                            parameterUnit: "m.s-1",
+                        }
+                    );
+                    const headerV = completeVelocityHeader(
+                        wind.header,
+                        wind.data,
+                        {
+                            parameterCategory: 2,
+                            parameterNumber: 3,
+                            parameterUnit: "m.s-1",
+                        }
+                    );
+                    const lats = Array.from(
+                        new Set(
+                            wind.data.map((p) => p.lat).filter((x) => x != null)
+                        )
+                    ).sort((a, b) => b - a);
+                    const lons = Array.from(
+                        new Set(
+                            wind.data.map((p) => p.lon).filter((x) => x != null)
+                        )
+                    ).sort((a, b) => a - b);
+                    const nx = headerU.nx || lons.length;
+                    const ny = headerU.ny || lats.length;
+                    const uArr = new Array(nx * ny);
+                    const vArr = new Array(nx * ny);
+                    const lonIndex = new Map(
+                        lons.map((val, idx) => [val, idx])
+                    );
+                    const latIndex = new Map(
+                        lats.map((val, idx) => [val, idx])
+                    );
+                    wind.data.forEach((p) => {
+                        const li = latIndex.get(p.lat);
+                        const gi = lonIndex.get(p.lon);
+                        if (li === undefined || gi === undefined) return;
+                        const pos = li * nx + gi;
+                        uArr[pos] = Number(p.u);
+                        vArr[pos] = Number(p.v);
+                    });
+                    for (let i = 0; i < nx * ny; i++) {
+                        if (typeof uArr[i] === "undefined") uArr[i] = 0;
+                        if (typeof vArr[i] === "undefined") vArr[i] = 0;
+                    }
+                    velocityData = [
+                        { header: headerU, data: uArr },
+                        { header: headerV, data: vArr },
+                    ];
+                    currentWindData = wind.data; // for arrows toggle
                 }
-
-                if (!wind || !wind.data) {
-                    console.error("Wind data format invalid:", wind);
-                    return;
-                }
-
-                // --- KONVERSI FORMAT KE FORMAT LEAFLET-VELOCITY ---
-                // Ini bagian jenius dari kode Anda: Memecah objek {u,v} menjadi array terpisah
-                const uData = wind.data.map((d) => d.u);
-                const vData = wind.data.map((d) => d.v);
-
-                const headerU = completeVelocityHeader(wind.header, wind.data, {
-                    parameterCategory: 2,
-                    parameterNumber: 2,
-                    parameterUnit: "m.s-1",
-                });
-                const headerV = completeVelocityHeader(wind.header, wind.data, {
-                    parameterCategory: 2,
-                    parameterNumber: 3,
-                    parameterUnit: "m.s-1",
-                });
-
-                const velocityData = [
-                    { header: headerU, data: uData },
-                    { header: headerV, data: vData },
-                ];
 
                 console.log("Converted velocity data:", velocityData);
                 // Helpful debug: show selected header and data length so we can tune scale
                 try {
-                    console.log("Selected wind header:", wind.header);
-                    console.log("Wind data length:", wind.data.length);
+                    const hdr = Array.isArray(velocityData)
+                        ? velocityData[0]?.header
+                        : null;
+                    const len = Array.isArray(velocityData)
+                        ? velocityData[0]?.data?.length
+                        : null;
+                    console.log("Selected wind header:", hdr);
+                    console.log("Wind grid length:", len);
                 } catch (e) {
                     /* ignore */
                 }
