@@ -1,115 +1,139 @@
-#!/usr/bin/env python3
-"""
-Convert ERA5 NetCDF file (era5_wind.nc) to JSON format
-suitable for update_wind.php script
-"""
-
+import xarray as xr
+import numpy as np
 import json
-import os
-import sys
+
+print("🌬️  Converting ERA5 NetCDF to JSON for leaflet-velocity...")
+
+# 1. Load NetCDF file
+nc_file = "era5_wind.nc"
+print(f"\n📂 Reading NetCDF file: {nc_file}")
 
 try:
-    import xarray as xr
-    import numpy as np
-except ImportError:
-    print("❌ Missing dependencies!")
-    print("Run: pip install xarray netcdf4 numpy")
-    sys.exit(1)
+    ds = xr.open_dataset(nc_file)
+    print("✅ File berhasil dibaca")
+    print(f"   Variables: {list(ds.data_vars)}")
+    print(f"   Dimensions: {dict(ds.dims)}")
+except Exception as e:
+    print(f"❌ Error reading file: {e}")
+    exit(1)
 
-def convert_nc_to_json():
-    # Input/Output paths
-    nc_file = 'era5_wind.nc'
-    json_dir = os.path.join('public', 'assets', 'data')
-    json_file = os.path.join(json_dir, 'era5_wind.json')
-    
-    # Check if NetCDF file exists
-    if not os.path.exists(nc_file):
-        print(f"❌ ERROR: File '{nc_file}' tidak ditemukan!")
-        sys.exit(1)
-    
-    print(f"📂 Reading NetCDF file: {nc_file}")
-    
-    try:
-        # Load NetCDF file
-        ds = xr.open_dataset(nc_file)
-        print(f"✅ File berhasil dibaca")
-        print(f"   Variables: {list(ds.data_vars)}")
-        print(f"   Dimensions: {dict(ds.dims)}")
-        
-        # Extract u and v components
-        # CDS API names them: '10m_u_component_of_wind', '10m_v_component_of_wind'
-        u_var = None
-        v_var = None
-        
-        for var_name in ds.data_vars:
-            if 'u' in var_name.lower():
-                u_var = var_name
-            elif 'v' in var_name.lower():
-                v_var = var_name
-        
-        if u_var is None or v_var is None:
-            print(f"❌ ERROR: Tidak menemukan komponen wind u/v")
-            print(f"   Available variables: {list(ds.data_vars)}")
-            sys.exit(1)
-        
-        print(f"\n📊 Extracting wind components:")
-        print(f"   U component: {u_var}")
-        print(f"   V component: {v_var}")
-        
-        # Get the data arrays
-        u_data = ds[u_var].values.flatten()
-        v_data = ds[v_var].values.flatten()
-        
-        # Remove NaN values
-        valid_mask = ~(np.isnan(u_data) | np.isnan(v_data))
-        u_data = u_data[valid_mask]
-        v_data = v_data[valid_mask]
-        
-        print(f"   Valid data points: {len(u_data)}")
-        
-        # Create JSON structure
-        data_points = []
-        for u, v in zip(u_data, v_data):
-            data_points.append({
-                'u': float(u),
-                'v': float(v)
-            })
-        
-        output_data = {
-            'metadata': {
-                'source': 'Copernicus ERA5 Reanalysis',
-                'u_var': u_var,
-                'v_var': v_var,
-                'description': '10m wind components (u, v) from ERA5',
-                'note': 'Wind speed = sqrt(u² + v²)'
-            },
-            'data': data_points
-        }
-        
-        # Create directory if not exists
-        os.makedirs(json_dir, exist_ok=True)
-        
-        # Write JSON file
-        with open(json_file, 'w') as f:
-            json.dump(output_data, f, indent=2)
-        
-        print(f"\n✅ JSON file created successfully!")
-        print(f"   Output: {json_file}")
-        print(f"   Data points: {len(data_points)}")
-        
-        # Show statistics
-        speeds = np.sqrt(u_data**2 + v_data**2)
-        print(f"\n📈 Wind speed statistics:")
-        print(f"   Min: {np.min(speeds):.2f} m/s")
-        print(f"   Max: {np.max(speeds):.2f} m/s")
-        print(f"   Mean: {np.mean(speeds):.2f} m/s")
-        print(f"   Std Dev: {np.std(speeds):.2f} m/s")
-        
-    except Exception as e:
-        print(f"❌ ERROR: {str(e)}")
-        sys.exit(1)
+# 2. Extract wind components
+u_var = 'u10'  # Adjust if needed (u10 = 10m wind)
+v_var = 'v10'  # Adjust if needed
 
-if __name__ == '__main__':
-    print("🌬️  Converting ERA5 NetCDF to JSON...\n")
-    convert_nc_to_json()
-    print("\n✨ Done! Now run: php update_wind.php")
+if u_var not in ds or v_var not in ds: 
+    print(f"❌ Variables {u_var} or {v_var} not found!")
+    print(f"   Available variables: {list(ds.data_vars)}")
+    exit(1)
+
+# Select first time step (or adjust as needed)
+u_data = ds[u_var].isel(valid_time=0).values  # Shape: (lat, lon)
+v_data = ds[v_var].isel(valid_time=0).values
+
+lats = ds['latitude'].values
+lons = ds['longitude'].values
+
+print(f"\n📊 Extracting wind components:")
+print(f"   U component: {u_var}")
+print(f"   V component: {v_var}")
+print(f"   Lat range: [{lats.min():.2f}, {lats.max():.2f}]")
+print(f"   Lon range: [{lons.min():.2f}, {lons.max():.2f}]")
+print(f"   Grid shape: {u_data.shape}")
+
+# 3. Build header (GRIB-like format for leaflet-velocity)
+ny, nx = u_data.shape
+lat_step = abs(lats[1] - lats[0]) if len(lats) > 1 else 1.0
+lon_step = abs(lons[1] - lons[0]) if len(lons) > 1 else 1.0
+
+header = {
+    "discipline": 0,
+    "disciplineName": "Meteorological products",
+    "gribEdition": 2,
+    "gribLength": int(nx * ny),
+    "center": 98,
+    "centerName": "European Centre for Medium-Range Weather Forecasts",
+    "significanceOfRT": 1,
+    "refTime": "2025-01-01T00:00:00Z",
+    "productStatus": 0,
+    "productType": 1,
+    "productDefinitionTemplate": 0,
+    "parameterCategory": 2,
+    "parameterNumber": 2,
+    "parameterNumberName":  "U-component_of_wind",
+    "parameterUnit": "m. s-1",
+    "genProcessType": 2,
+    "forecastTime": 0,
+    "surface1Type": 103,
+    "surface1Value": 10.0,
+    "surface2Type": 255,
+    "surface2Value":  0.0,
+    "gridDefinitionTemplate": 0,
+    "numberPoints": int(nx * ny),
+    "shape": 6,
+    "gridUnits": "degrees",
+    "resolution": 48,
+    "winds": "true",
+    "scanMode": 0,
+    "nx": int(nx),
+    "ny": int(ny),
+    "basicAngle": 0,
+    "subDivisions": 0,
+    "lo1": float(lons. min()),
+    "la1": float(lats.max()),  # North edge
+    "lo2": float(lons.max()),
+    "la2": float(lats.min()),  # South edge
+    "dx":  float(lon_step),
+    "dy": float(lat_step)
+}
+
+# 4. Flatten data (row-major order:  north to south, west to east)
+# leaflet-velocity expects data in specific order
+u_flat = u_data.flatten().tolist()
+v_flat = v_data.flatten().tolist()
+
+# Replace NaN with 0
+u_flat = [0.0 if np.isnan(x) else float(x) for x in u_flat]
+v_flat = [0.0 if np.isnan(x) else float(x) for x in v_flat]
+
+# 5. Build output structure (array of 2 records:  U and V)
+output = [
+    {
+        "header":  {
+            **header,
+            "parameterNumber": 2,
+            "parameterNumberName": "U-component_of_wind"
+        },
+        "data":  u_flat
+    },
+    {
+        "header": {
+            **header,
+            "parameterNumber": 3,
+            "parameterNumberName": "V-component_of_wind"
+        },
+        "data": v_flat
+    }
+]
+
+# 6. Save to JSON
+output_file = "public/assets/data/era5_wind.json"
+with open(output_file, 'w') as f:
+    json.dump(output, f, separators=(',', ':'))  # Compact format
+
+print(f"\n✅ JSON file created successfully!")
+print(f"   Output:  {output_file}")
+print(f"   Data points: {len(u_flat)}")
+
+# 7. Statistics
+u_valid = [x for x in u_flat if x != 0]
+v_valid = [x for x in v_flat if x != 0]
+speeds = [np.sqrt(u**2 + v**2) for u, v in zip(u_valid, v_valid)]
+
+if speeds:
+    print(f"\n📈 Wind speed statistics:")
+    print(f"   Min:  {min(speeds):.2f} m/s")
+    print(f"   Max: {max(speeds):.2f} m/s")
+    print(f"   Mean: {np.mean(speeds):.2f} m/s")
+    print(f"   Std Dev: {np.std(speeds):.2f} m/s")
+
+print(f"\n✨ Done!  Refresh your browser to see wind animation.")

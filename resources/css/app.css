@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Wind Direction Markers */
+.wind-direction-marker {
+    filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.3));
+    transition: all 0.2s ease;
+}
+
+.wind-direction-marker:hover {
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)) brightness(1.1);
+}
+
+/* Leaflet popup styling for wind info */
+.leaflet-popup-content {
+    font-size: 12px;
+    margin: 0;
+}
+
+.leaflet-popup-content strong {
+    font-weight: 600;
+}

@@ -8,19 +8,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <!-- CSS Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
     <!-- CSS Animasi Angin (leaflet-velocity) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-velocity@1.1.0/dist/leaflet-velocity.min.css" />
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Pastikan peta memiliki tinggi */
-        #map {
-            height: 80vh; /* 80% dari tinggi layar */
-        }
+        #map { height: 80vh; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
@@ -94,6 +89,18 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Wind Direction Toggle -->
+                <div>
+                    <label class="block text-lg font-bold mb-3">WIND DIRECTION</label>
+                    <button id="btn-wind-direction-toggle" class="w-full flex items-center justify-center p-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition">
+                        <svg class="w-5 h-5 text-gray-600 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+                        </svg>
+                        <span class="text-sm font-semibold text-gray-700">Show Wind Arrows</span>
+                    </button>
+                    <p class="text-xs text-gray-500 mt-2">Click to toggle wind direction indicators on the map</p>
+                </div>
                 
                 <!-- Time Period -->
                 <div>
@@ -145,8 +152,8 @@
     <!-- Plugin Animasi Angin -->
     <script src="https://cdn.jsdelivr.net/npm/leaflet-velocity@1.1.0/dist/leaflet-velocity.min.js"></script>
 
-    <!-- JavaScript Kustom Anda -->
-    <script src="{{ asset('js/app.js') }}"></script> 
+    <!-- JavaScript Kustom (semua logika peta di app.js) -->
+    <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 </html>
