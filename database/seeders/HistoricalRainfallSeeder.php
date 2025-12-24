@@ -8,7 +8,7 @@ class HistoricalRainfallSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('historical_rainfall_data')->truncate(); // Kosongkan tabel
+        DB::table('historical_rainfall_data')->truncate(); 
 
         $data1998 = [
             ['Jan', 1, 450], ['Feb', 2, 420], ['Mar', 3, 380],

@@ -10,7 +10,6 @@ class RainfallDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // Hapus data lama jika ada, untuk menghindari duplikat
         DB::table('rainfall_data')->truncate(); 
 
         $months = [

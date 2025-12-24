@@ -30,7 +30,7 @@ class WindMapDataController extends Controller
             return response()->json($json);
         }
 
-        return response()->json(['error' => 'Data peta tidak ditemukan'], 404);
+        return response()->json(['error' => 'Data not found'], 404);
     }
 
 }

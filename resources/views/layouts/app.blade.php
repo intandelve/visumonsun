@@ -105,7 +105,11 @@
                     @endif
 
                     <!-- Content -->
-                    {{ $slot }}
+                    @hasSection('content')
+                        @yield('content')
+                    @else
+                        {{ $slot ?? '' }}
+                    @endif
                 </main>
             </div>
         </div>

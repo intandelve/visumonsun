@@ -9,8 +9,8 @@ return new class extends Migration
     {
         Schema::create('wind_map_data', function (Blueprint $table) {
             $table->id();
-            $table->string('data_type'); // e.g., 'current_wind'
-            $table->json('json_data'); // Kolom tipe JSON untuk data peta
+            $table->string('data_type'); 
+            $table->json('json_data'); 
             $table->timestamps();
         });
     }

@@ -30,7 +30,7 @@ class WindMapDataSeeder extends Seeder
 
             $this->command->info("✅ Wind map data seeded with ERA5 real data!");
         } else {
-            $this->command->error("❌ File era5_wind.json tidak ditemukan!");
+            $this->command->error("❌ File era5_wind.json not found!");
         }
     }
 

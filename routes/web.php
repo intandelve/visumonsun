@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RainfallController;
 use App\Http\Controllers\Admin\WindSpeedController;
@@ -8,29 +9,23 @@ use App\Http\Controllers\Admin\ForecastController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Auth;
 
-// ✅ Halaman pertama = login (redirect dari root)
+//login
 Route::get('/', function () {
     if (Auth::check()) {
-        // Kalau sudah login
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
         return redirect()->route('home');
     }
-    // Kalau belum login, ke halaman login
     return redirect()->route('login');
 })->name('root');
 
-// ✅ Routes untuk USER BIASA (harus login, read-only)
 Route::middleware('auth')->group(function () {
-    // Home & Public Pages (protected, harus login)
     Route::get('/home', function () {
         return view('home');
     })->name('home');
 
-    Route::get('/statistics', function () {
-        return view('statistics');
-    })->name('statistics');
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics');
 
     Route::get('/forecast', function () {
         return view('forecast');
@@ -44,22 +39,19 @@ Route::middleware('auth')->group(function () {
         return view('contact');
     })->name('contact');
 
-    // User Dashboard (read-only)
     Route::get('/dashboard', function () {
-        // Kalau admin, redirect ke admin dashboard
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
         return view('user_dashboard');
     })->name('dashboard');
 
-    // Profile routes (user & admin bisa edit profile sendiri)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController:: class, 'destroy'])->name('profile.destroy');
 });
 
-// ✅ Routes untuk ADMIN (harus login + role admin)
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [RainfallController::class, 'index'])->name('admin.dashboard');
 

@@ -9,9 +9,9 @@ return new class extends Migration
     {
         Schema::create('historical_rainfall_data', function (Blueprint $table) {
             $table->id();
-            $table->integer('year'); // e.g., 1998, 2023
-            $table->integer('month_index'); // e.g., 1, 2, 3
-            $table->string('month_name'); // e.g., "Jan", "Feb"
+            $table->integer('year'); 
+            $table->integer('month_index'); 
+            $table->string('month_name'); 
             $table->decimal('rainfall_mm', 8, 2);
             $table->timestamps();
         });

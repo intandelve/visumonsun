@@ -9,9 +9,9 @@ return new class extends Migration
     {
         Schema::create('forecasts', function (Blueprint $table) {
             $table->id();
-            $table->string('data_type'); // e.g., 'seasonal_outlook'
-            $table->string('title'); // e.g., 'Seasonal Outlook (Next 3 Months)'
-            $table->text('content'); // Teks prakiraannya
+            $table->string('data_type'); 
+            $table->string('title'); 
+            $table->text('content'); 
             $table->timestamps();
         });
     }

@@ -11,12 +11,11 @@ return new class extends Migration
      */
 public function up(): void
     {
-        // GANTI FUNGSI UP() ANDA DENGAN INI
         Schema::create('wind_speed_data', function (Blueprint $table) {
             $table->id();
-            $table->string('month_name'); // e.g., "Jan"
-            $table->integer('month_index'); // e.g., 1
-            $table->decimal('speed_ms', 8, 2); // e.g., 5.1, 5.3
+            $table->string('month_name'); 
+            $table->integer('month_index'); 
+            $table->decimal('speed_ms', 8, 2); 
             $table->timestamps();
         });
     }

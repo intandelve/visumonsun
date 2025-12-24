@@ -8,7 +8,7 @@ use App\Models\RainfallData;
 
 class RainfallController extends Controller
 {
-    public function index()
+    public function index() //get rainfall data for dashboard
     {
         $rainfallData = RainfallData::orderBy('month_index', 'asc')->get();
 
@@ -17,12 +17,12 @@ class RainfallController extends Controller
         ]);
     }
 
-    public function create()
+    public function create() //get rainfall/create
     {
         return view('admin.rainfall_create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //post rainfall data
     {
         $request->validate([
             'month_name' => 'required|string|max:255',
@@ -53,7 +53,7 @@ class RainfallController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Rainfall data added successfully.');
     }
 
-    public function edit($id)
+    public function edit($id) //get rainfall/edit/{id}
     {
         $rainfall = RainfallData::findOrFail($id);
         
@@ -62,7 +62,7 @@ class RainfallController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //put rainfall/{id}   
     {
         $request->validate([
             'month_name' => 'required|string|max:255',
@@ -90,7 +90,7 @@ class RainfallController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Rainfall data updated successfully.');
     }
 
-    public function destroy($id)
+    public function destroy($id) //delete rainfall/{id}
     {
         $rainfall = RainfallData::findOrFail($id);
         $rainfall->delete();

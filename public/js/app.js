@@ -1,8 +1,3 @@
-
-// ==========================================================
-// app.js – Script utama untuk Dashboard dan Statistics Page
-// ==========================================================
-
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Website script loaded!");
 
@@ -23,9 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map);
 
-        // ==========================================================
-        // AMBIL DATA ANGIN DARI API LARAVEL
-        // ==========================================================
         fetch("/api/wind-map-data")
             .then((response) => {
                 if (!response.ok) {

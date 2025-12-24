@@ -55,7 +55,6 @@
 
     <!-- Main Content -->
     <main class="flex-grow">
-        <!-- Hero Section -->
         <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white py-16 px-4">
             <div class="max-w-5xl mx-auto text-center">
                 <h1 class="text-5xl font-bold mb-4">Understanding Monsoons in Indonesia</h1>
@@ -65,7 +64,6 @@
 
         <div class="max-w-6xl mx-auto px-4 -mt-8 pb-12 space-y-12">
             
-            <!-- What is Monsoon -->
             <div class="bg-white p-8 rounded-2xl shadow-xl">
                 <div class="flex items-center space-x-3 mb-6">
                     <div class="bg-blue-100 p-3 rounded-lg">
@@ -90,7 +88,6 @@
                 </div>
             </div>
 
-            <!-- Why Monsoons Matter -->
             <div class="bg-gradient-to-br from-indigo-600 to-blue-600 p-8 rounded-2xl shadow-xl text-white">
                 <h2 class="text-3xl font-bold mb-6 flex items-center space-x-3">
                     <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -117,7 +114,6 @@
                 </div>
             </div>
 
-            <!-- Climate Phenomena -->
             <div class="bg-white p-8 rounded-2xl shadow-xl">
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">Related Climate Phenomena</h2>
                 <div class="space-y-6">
@@ -136,7 +132,6 @@
                 </div>
             </div>
 
-            <!-- Our Mission & Technology -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white p-8 rounded-2xl shadow-xl">
                     <h2 class="text-2xl font-bold text-blue-600 mb-4">🎯 Our Mission</h2>

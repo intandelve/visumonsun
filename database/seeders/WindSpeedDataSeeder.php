@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders; // <-- INI PENTING!
+namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB; // <-- INI PENTING!
+use Illuminate\Support\Facades\DB; 
 
 class WindSpeedDataSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class WindSpeedDataSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('wind_speed_data')->truncate(); // Kosongkan tabel
+        DB::table('wind_speed_data')->truncate(); 
 
         $months = [
             ['Jan', 1, 5.1], ['Feb', 2, 5.3], ['Mar', 3, 5.0],

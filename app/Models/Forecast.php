@@ -7,6 +7,5 @@ class Forecast extends Model
 {
     use HasFactory;
 
-    // Beri tahu Model nama tabel yang benar
     protected $table = 'forecasts';
 }

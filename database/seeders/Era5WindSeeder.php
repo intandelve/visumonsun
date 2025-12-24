@@ -9,7 +9,7 @@ class Era5WindSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('wind_map_data')->truncate();
+        DB::table('wind_map_data')->truncate(); // Clear existing data
 
         $jsonPath = public_path('assets/data/era5_wind.json');
 

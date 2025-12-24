@@ -13,9 +13,9 @@ return new class extends Migration
 {
     Schema::create('rainfall_data', function (Blueprint $table) {
         $table->id();
-        $table->string('month_name'); // e.g., "Jan", "Feb"
-        $table->integer('month_index'); // e.g., 1, 2, 3
-        $table->decimal('rainfall_mm', 8, 2); // e.g., 340.50
+        $table->string('month_name'); 
+        $table->integer('month_index'); 
+        $table->decimal('rainfall_mm', 8, 2); 
         $table->timestamps();
     });
 }
